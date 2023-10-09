@@ -1,28 +1,43 @@
-print("Задание 1 из 1го файла")
-class StringVar:
-    text: str
-    def __init__(self, text: str):
-        self.set(text)
-    def get(self) -> str:
-        return self.text
-    def set(self, text: str):
-        assert isinstance(text, str), "Используйте только тип строка!"
-        self.text = text
-
-print("Задание 2 из 1го файла")
-class Point:
-    def __init__(self, x: int, y: int):
-        self.x, self.y = x, y
-
-print("Задание ... из 2го файла")
-import json
-class Model:
-    title = '1'
-    text = '2'
-    author = '3'
-    def save(self):
-      dct = {k: str(v) for k, v in vars(Model).items()}
-      with open('file.txt', 'w', encoding='utf-8') as fout:
-          json.dump(dct, fout)
-obj = Model()
-obj.save()
+print("Задание 1 и 2")
+import time
+from random import randint
+from threading import Thread
+def get_thread(thread_name):
+	time.sleep(1)
+	print(thread_name)
+threads = [Thread(target = get_thread, args = ("thread"+str(randint(1,100)), )) for i in range(5)]
+time1 = time.time() 
+for t in threads:
+	t.start()
+	t.join()
+print(f"Время последовательного выполнения: {time.time()-time1}")
+threads = [Thread(target = get_thread, args = ("thread"+str(randint(1,100)), )) for i in range(5)]
+time1 = time.time()
+for t in threads:
+	t.start()
+for t in threads:
+	t.join()
+print(f"Время параллельного выполнения: {time.time()-time1}")
+print("------------------------------------------------------")
+print("Задание 3")
+import requests
+import time
+from threading import Thread
+def get_html(link):
+	text = requests.get(link).text
+	print(f"{link} text length is {len(text)}")
+links = ["https://yandex.ru/", "https://www.google.com/", "https://brunoyam.com/", "https://pythonru.com/", "https://github.com/Fistables"]
+threads = [Thread(target = get_html, args = (links[i], )) for i in range(5)]
+time1 = time.time() 
+for t in threads:
+	t.start()
+	t.join()
+print(f"Время последовательного выполнения: {time.time()-time1}\n")
+threads = [Thread(target = get_html, args = (links[i], )) for i in range(5)]
+time1 = time.time()
+for t in threads:
+	t.start()
+for t in threads:
+	t.join()
+print(f"Время параллельного выполнения: {time.time()-time1}")
+print("------------------------------------------------------")
